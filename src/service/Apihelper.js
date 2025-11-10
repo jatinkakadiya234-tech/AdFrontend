@@ -51,6 +51,20 @@ const Apihelper = {
   },
   TrackClick: (id, data) => {
     return axios.post(url + `/ad/click/${id}`, data)
+  },
+  
+  // User Management APIs
+  GetAllUsers: (params) => {
+    return axios.get(url + "/user/all", { params })
+  },
+  CreateUser: (data) => {
+    return axios.post(url + "/user/create", data)
+  },
+  UpdateUser: (id, data) => {
+    return axios.put(url + `/user/update/${id}`, data)
+  },
+  DeleteUser: (id) => {
+    return axios.delete(url + `/user/delete/${id}`)
   }
 }
 

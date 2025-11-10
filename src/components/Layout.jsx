@@ -22,15 +22,38 @@ const Layout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
+    const checkUser = () => {
+      const userData = localStorage.getItem('user');
+      const token = localStorage.getItem('token');
+      
+      if (!userData || !token) {
+        // Clear any remaining data and redirect
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
+        return;
+      }
+      
+      try {
+        const parsedUser = JSON.parse(userData);
+        if (!parsedUser.id || !parsedUser.role) {
+          // Invalid user data
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          navigate('/login');
+          return;
+        }
+        setUser(parsedUser);
+      } catch (error) {
+        // Invalid JSON
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
+      }
+    };
     
-    // Debug: Check user data
-    console.log('User data:', userData);
-    console.log('Cookies (limited access):', document.cookie);
-  }, []);
+    checkUser();
+  }, [navigate]);
 
   const handleLogout = async () => {
     try {
@@ -38,9 +61,14 @@ const Layout = () => {
     } catch (error) {
       console.log('Logout API error:', error);
     } finally {
+      // Clear all user data
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      navigate('/login');
+      setUser(null);
+      setProfileOpen(false);
+      setSidebarOpen(false);
+      // Force redirect to login
+      window.location.href = '/login';
     }
   };
 
@@ -82,7 +110,21 @@ const Layout = () => {
     }
   };
 
-  const navItems = getNavItemsForRole(user?.role);
+  const navItems = user ? getNavItemsForRole(user.role) : [];
+
+  // If no user, don't render the layout
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mb-4 mx-auto animate-pulse">
+            <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <p className="text-xl font-semibold text-gray-700">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen bg-gray-100 flex flex-col">

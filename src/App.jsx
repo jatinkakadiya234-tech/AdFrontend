@@ -12,6 +12,7 @@ import MyAdsPage from './pages/MyAdsPage'
 import AdListPage from './pages/AdListPage'
 import ActiveAdsPage from './pages/ActiveAdsPage'
 import CategoriesPage from './pages/CategoriesPage'
+import AdvertisersPage from './pages/AdvertisersPage'
 import AuthContainer from './auth/AuthContainer'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -55,7 +56,7 @@ function App() {
             <Route path="categories" element={<ProtectedRoute><CategoriesPage /></ProtectedRoute>} />
             
             {/* Admin Routes */}
-            <Route path="advertisers" element={<ProtectedRoute><div className="p-6"><h1 className="text-2xl font-bold">Advertisers</h1></div></ProtectedRoute>} />
+            <Route path="advertisers" element={<ProtectedRoute><AdvertisersPage /></ProtectedRoute>} />
           </Route>
         </Routes>
     </Router>
