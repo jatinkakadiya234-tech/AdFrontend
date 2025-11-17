@@ -97,92 +97,96 @@ const AdListPage = () => {
         </div>
 
         {/* Controls Section */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 mb-8">
-          <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-4 sm:p-6 lg:p-8 mb-8">
+          <div className="flex flex-col gap-6">
             {/* Search Bar */}
-            <div className="relative flex-1 max-w-md">
+            <div className="relative w-full max-w-md mx-auto lg:mx-0">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search campaigns, brands, or formats..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all bg-gray-50/50"
+                className="w-full pl-12 pr-4 py-3 sm:py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all bg-gray-50/50 text-sm sm:text-base"
               />
             </div>
 
-            {/* Filters */}
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Filter className="w-5 h-5 text-gray-500" />
-                <span className="text-sm font-medium text-gray-700">Filters:</span>
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              {/* Filters */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center space-x-2">
+                  <Filter className="w-5 h-5 text-gray-500" />
+                  <span className="text-sm font-medium text-gray-700">Filters:</span>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+                  <select
+                    value={filters.device}
+                    onChange={(e) => setFilters({...filters, device: e.target.value})}
+                    className="px-3 sm:px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white text-sm"
+                  >
+                    <option value="">All Devices</option>
+                    <option value="web">Desktop</option>
+                    <option value="mobile">Mobile</option>
+                    <option value="tablet">Tablet</option>
+                  </select>
+                  
+                  <select
+                    value={filters.platform}
+                    onChange={(e) => setFilters({...filters, platform: e.target.value})}
+                    className="px-3 sm:px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white text-sm"
+                  >
+                    <option value="">All Platforms</option>
+                    <option value="html">HTML/CSS</option>
+                    <option value="react">React</option>
+                    <option value="php">PHP</option>
+                    <option value="java">Java</option>
+                    <option value="flutter">Flutter</option>
+                    <option value="swift">Swift</option>
+                  </select>
+
+                  <select
+                    value={filters.mediaType}
+                    onChange={(e) => setFilters({...filters, mediaType: e.target.value})}
+                    className="px-3 sm:px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white text-sm"
+                  >
+                    <option value="">All Formats</option>
+                    <option value="image">Static Image</option>
+                    <option value="video">Video</option>
+                    <option value="gif">Animated GIF</option>
+                  </select>
+                </div>
               </div>
-              
-              <select
-                value={filters.device}
-                onChange={(e) => setFilters({...filters, device: e.target.value})}
-                className="px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
-              >
-                <option value="">All Devices</option>
-                <option value="web">Desktop</option>
-                <option value="mobile">Mobile</option>
-                <option value="tablet">Tablet</option>
-              </select>
-              
-              <select
-                value={filters.platform}
-                onChange={(e) => setFilters({...filters, platform: e.target.value})}
-                className="px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
-              >
-                <option value="">All Platforms</option>
-                <option value="html">HTML/CSS</option>
-                <option value="react">React</option>
-                <option value="php">PHP</option>
-                <option value="java">Java</option>
-                <option value="flutter">Flutter</option>
-                <option value="swift">Swift</option>
-              </select>
 
-              <select
-                value={filters.mediaType}
-                onChange={(e) => setFilters({...filters, mediaType: e.target.value})}
-                className="px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
-              >
-                <option value="">All Formats</option>
-                <option value="image">Static Image</option>
-                <option value="video">Video</option>
-                <option value="gif">Animated GIF</option>
-              </select>
-            </div>
-
-            {/* View Toggle */}
-            <div className="flex items-center bg-gray-100 rounded-xl p-1">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg transition-all ${
-                  viewMode === 'grid' 
-                    ? 'bg-white shadow-sm text-purple-600' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <Grid3X3 className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg transition-all ${
-                  viewMode === 'list' 
-                    ? 'bg-white shadow-sm text-purple-600' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <List className="w-5 h-5" />
-              </button>
+              {/* View Toggle */}
+              <div className="flex items-center bg-gray-100 rounded-xl p-1 w-fit mx-auto lg:mx-0">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-lg transition-all ${
+                    viewMode === 'grid' 
+                      ? 'bg-white shadow-sm text-purple-600' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Grid3X3 className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg transition-all ${
+                    viewMode === 'list' 
+                      ? 'bg-white shadow-sm text-purple-600' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <List className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
           <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
@@ -260,9 +264,9 @@ const AdListPage = () => {
             </p>
           </div>
         ) : (
-          <div className={`grid gap-8 ${
+          <div className={`grid gap-4 sm:gap-6 lg:gap-8 ${
             viewMode === 'grid' 
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
+              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' 
               : 'grid-cols-1'
           }`}>
             {filteredAds.map((ad) => {
@@ -326,24 +330,24 @@ const AdListPage = () => {
                   </div>
 
                   {/* Campaign Details */}
-                  <div className="p-8">
-                    <div className="flex items-start justify-between mb-4">
+                  <div className="p-4 sm:p-6 lg:p-8">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-2">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
                           {ad.title}
                         </h3>
                         <p className="text-gray-600 text-sm">
                           {ad.width} × {ad.height}px • Created by {ad.createdBy?.username || 'Anonymous'}
                         </p>
                       </div>
-                      <div className="flex items-center space-x-1 text-yellow-500">
+                      <div className="flex items-center space-x-1 text-yellow-500 w-fit">
                         <Star className="w-4 h-4 fill-current" />
                         <span className="text-sm font-medium">4.8</span>
                       </div>
                     </div>
 
                     {/* Performance Metrics */}
-                    <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                       <div className="text-center p-3 bg-blue-50 rounded-xl">
                         <div className="flex items-center justify-center mb-1">
                           <Eye className="w-4 h-4 text-blue-600 mr-1" />
@@ -405,10 +409,10 @@ const AdListPage = () => {
                     {/* Action Button */}
                     <button 
                       onClick={() => handleAdClick(ad)}
-                      className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2"
+                      className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 text-sm sm:text-base"
                     >
                       <span>Experience Campaign</span>
-                      <ArrowUpRight className="w-5 h-5" />
+                      <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                   </div>
                 </div>

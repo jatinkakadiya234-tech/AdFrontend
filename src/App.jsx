@@ -13,6 +13,14 @@ import AdListPage from './pages/AdListPage'
 import ActiveAdsPage from './pages/ActiveAdsPage'
 import CategoriesPage from './pages/CategoriesPage'
 import AdvertisersPage from './pages/AdvertisersPage'
+import AdViewerPage from './pages/AdViewerPage'
+import JoinRequestPage from './pages/JoinRequestPage'
+import CreateCategoryPage from './pages/CreateCategoryPage'
+import WalletPage from './pages/WalletPage'
+import ImpressionDashboard from './pages/ImpressionDashboard'
+import EmbedCodePage from './pages/EmbedCodePage'
+import TestPage from './pages/TestPage'
+import AdGalleryPage from './pages/AdGalleryPage'
 import AuthContainer from './auth/AuthContainer'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -36,6 +44,11 @@ function App() {
         <Routes>
           <Route path="/login" element={!isAuthenticated ? <AuthContainer /> : <Navigate to="/dashboard" replace />} />
           <Route path="/register" element={!isAuthenticated ? <AuthContainer /> : <Navigate to="/dashboard" replace />} />
+          <Route path="/join-request" element={<JoinRequestPage />} />
+          <Route path="/ads" element={<AdViewerPage />} />
+          <Route path="/gallery" element={<AdGalleryPage />} />
+          <Route path="/embed-code/:id" element={<EmbedCodePage />} />
+          <Route path="/test" element={<TestPage />} />
           
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/dashboard" replace />} />
@@ -45,15 +58,18 @@ function App() {
             <Route path="settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
             <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             
-            {/* Viewer Routes */}
+            {/* Public/Viewer Routes */}
             <Route path="ad-list" element={<ProtectedRoute><AdListPage /></ProtectedRoute>} />
             <Route path="active-ads" element={<ProtectedRoute><ActiveAdsPage /></ProtectedRoute>} />
+            <Route path="ad-viewer" element={<AdViewerPage />} />
             
             {/* Advertiser Routes */}
-            <Route path="create-ad" element={<ProtectedRoute><CreateAdPage /></ProtectedRoute>} />
+            <Route path="create-ad" element={<CreateAdPage />} />
             <Route path="my-ads" element={<ProtectedRoute><MyAdsPage /></ProtectedRoute>} />
-            <Route path="create-category" element={<ProtectedRoute><div className="p-6"><h1 className="text-2xl font-bold">Create Category</h1></div></ProtectedRoute>} />
+            <Route path="create-category" element={<ProtectedRoute><CreateCategoryPage /></ProtectedRoute>} />
             <Route path="categories" element={<ProtectedRoute><CategoriesPage /></ProtectedRoute>} />
+            <Route path="wallet" element={<ProtectedRoute><WalletPage /></ProtectedRoute>} />
+            <Route path="impressions" element={<ProtectedRoute><ImpressionDashboard /></ProtectedRoute>} />
             
             {/* Admin Routes */}
             <Route path="advertisers" element={<ProtectedRoute><AdvertisersPage /></ProtectedRoute>} />

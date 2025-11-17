@@ -173,7 +173,7 @@ const AdvertisersPage = () => {
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
           <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
@@ -224,10 +224,10 @@ const AdvertisersPage = () => {
         </div>
 
         {/* Controls */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-6 mb-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-4 sm:p-6 mb-8">
+          <div className="flex flex-col gap-4">
             {/* Search */}
-            <div className="relative flex-1 max-w-md">
+            <div className="relative w-full max-w-md mx-auto lg:mx-0">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
@@ -240,7 +240,7 @@ const AdvertisersPage = () => {
 
             <button 
               onClick={() => setShowCreateModal(true)}
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg flex items-center space-x-2"
+              className="w-full sm:w-auto px-4 sm:px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 mx-auto lg:mx-0"
             >
               <UserPlus className="w-5 h-5" />
               <span>Create Advertiser</span>
@@ -260,17 +260,17 @@ const AdvertisersPage = () => {
 
         {/* Advertisers Table */}
         {filteredAdvertisers.length === 0 ? (
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-16 text-center">
-            <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Users className="w-10 h-10 text-gray-400" />
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 sm:p-16 text-center">
+            <div className="w-16 sm:w-20 h-16 sm:h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Users className="w-8 sm:w-10 h-8 sm:h-10 text-gray-400" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">No Advertisers Found</h3>
-            <p className="text-gray-600 max-w-md mx-auto mb-8">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">No Advertisers Found</h3>
+            <p className="text-gray-600 max-w-md mx-auto mb-8 text-sm sm:text-base">
               {searchTerm ? 'Try adjusting your search criteria' : 'Create your first advertiser account to get started'}
             </p>
             <button 
               onClick={() => setShowCreateModal(true)}
-              className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg"
+              className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg text-sm sm:text-base"
             >
               Create First Advertiser
             </button>
@@ -278,47 +278,47 @@ const AdvertisersPage = () => {
         ) : (
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[800px]">
                 <thead className="bg-gray-50/80">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Advertiser</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Contact</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Company</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Wallet</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Last Login</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Actions</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Advertiser</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Contact</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Company</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Status</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Wallet</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Last Login</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {filteredAdvertisers.map((advertiser) => (
                     <tr key={advertiser._id} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-4">
                         <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold">
+                          <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                             {advertiser.profile?.firstName?.[0] || advertiser.username[0].toUpperCase()}
                           </div>
-                          <div>
-                            <h3 className="font-semibold text-gray-900">
+                          <div className="min-w-0">
+                            <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">
                               {advertiser.profile?.firstName && advertiser.profile?.lastName 
                                 ? `${advertiser.profile.firstName} ${advertiser.profile.lastName}`
                                 : advertiser.username
                               }
                             </h3>
-                            <p className="text-sm text-gray-600">@{advertiser.username}</p>
+                            <p className="text-xs sm:text-sm text-gray-600 truncate">@{advertiser.username}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-4">
                         <div className="space-y-1">
-                          <div className="flex items-center space-x-2 text-sm">
-                            <Mail className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">{advertiser.email}</span>
+                          <div className="flex items-center space-x-2 text-xs sm:text-sm">
+                            <Mail className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400 flex-shrink-0" />
+                            <span className="text-gray-900 truncate">{advertiser.email}</span>
                           </div>
                           {advertiser.profile?.phone && (
-                            <div className="flex items-center space-x-2 text-sm">
-                              <Phone className="w-4 h-4 text-gray-400" />
-                              <span className="text-gray-900">{advertiser.profile.phone}</span>
+                            <div className="flex items-center space-x-2 text-xs sm:text-sm">
+                              <Phone className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400 flex-shrink-0" />
+                              <span className="text-gray-900 truncate">{advertiser.profile.phone}</span>
                             </div>
                           )}
                         </div>
@@ -370,28 +370,28 @@ const AdvertisersPage = () => {
                           }
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center space-x-2">
+                      <td className="px-4 sm:px-6 py-4">
+                        <div className="flex items-center space-x-1 sm:space-x-2">
                           <button 
                             onClick={() => setViewingAdvertiser(advertiser)}
-                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="p-1.5 sm:p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                             title="View Details"
                           >
-                            <Eye className="w-4 h-4" />
+                            <Eye className="w-3 sm:w-4 h-3 sm:h-4" />
                           </button>
                           <button 
                             onClick={() => setEditingAdvertiser(advertiser)}
-                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                            className="p-1.5 sm:p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                             title="Edit Advertiser"
                           >
-                            <Edit3 className="w-4 h-4" />
+                            <Edit3 className="w-3 sm:w-4 h-3 sm:h-4" />
                           </button>
                           <button 
                             onClick={() => handleDeleteAdvertiser(advertiser._id)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            className="p-1.5 sm:p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             title="Delete Advertiser"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-3 sm:w-4 h-3 sm:h-4" />
                           </button>
                         </div>
                       </td>

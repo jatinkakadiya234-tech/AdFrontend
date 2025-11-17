@@ -5,7 +5,7 @@ import {
   Image, Video, Zap, Settings, ExternalLink, Calendar,
   CheckCircle, XCircle, AlertCircle, Sparkles, Target,
   Globe, Code, Coffee, Apple, Upload, X, Save, List,
-  Grid3X3, Search, Filter
+  Grid3X3, Search, Filter, DollarSign
 } from 'lucide-react';
 import { SiReact, SiPhp, SiFlutter } from 'react-icons/si';
 import Apihelper from '../service/Apihelper';
@@ -19,9 +19,22 @@ const MyAdsPage = () => {
   const [updateLoading, setUpdateLoading] = useState(false);
   const [viewMode, setViewMode] = useState('table');
   const [searchTerm, setSearchTerm] = useState('');
+  const [rechargeAd, setRechargeAd] = useState(null);
+  const [rechargeAmount, setRechargeAmount] = useState('');
+  const [rechargeLoading, setRechargeLoading] = useState(false);
+  const [userWalletBalance, setUserWalletBalance] = useState(0);
 
   useEffect(() => {
     fetchAds();
+    fetchUserWallet();
+    
+    // Auto-refresh impressions every 10 seconds
+    const interval = setInterval(() => {
+      fetchAds();
+      fetchUserWallet();
+    }, 10000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   const fetchAds = async () => {
@@ -32,6 +45,15 @@ const MyAdsPage = () => {
       setError(err.response?.data?.message || 'Failed to fetch campaigns');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchUserWallet = async () => {
+    try {
+      const response = await Apihelper.GetWalletData();
+      setUserWalletBalance(response.data.balance || 0);
+    } catch (err) {
+      console.error('Error fetching wallet balance:', err);
     }
   };
 
@@ -68,8 +90,8 @@ const MyAdsPage = () => {
       formData.append('height', editingAd.height);
       formData.append('clickUrl', editingAd.clickUrl);
       formData.append('isActive', editingAd.isActive);
-      formData.append('targetDevices', JSON.stringify(editingAd.targetDevices));
-      formData.append('targetPlatforms', JSON.stringify(editingAd.targetPlatforms));
+      formData.append('targetDevices', JSON.stringify(editingAd.targetDevices || ['web', 'mobile']));
+      formData.append('targetPlatforms', JSON.stringify(editingAd.targetPlatforms || ['html']));
       
       if (editingAd.file) {
         formData.append('file', editingAd.file);
@@ -78,8 +100,12 @@ const MyAdsPage = () => {
       await Apihelper.UpdateAd(editingAd._id, formData);
       setEditingAd(null);
       fetchAds();
+      // Auto-close error after 3 seconds if successful
+      setTimeout(() => setError(''), 3000);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update campaign');
+      // Auto-close error after 3 seconds
+      setTimeout(() => setError(''), 3000);
     } finally {
       setUpdateLoading(false);
     }
@@ -87,11 +113,37 @@ const MyAdsPage = () => {
 
   const handlePreview = async (ad) => {
     try {
-      await Apihelper.TrackClick(ad._id, { device: 'web' });
+      await Apihelper.TrackImpression(ad._id, { 
+        device: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'web',
+        isClick: true
+      });
+      // Refresh data to show updated counts
+      setTimeout(() => fetchAds(), 500);
       window.open(ad.clickUrl, '_blank');
     } catch (err) {
       console.log('Click tracking failed:', err);
       window.open(ad.clickUrl, '_blank');
+    }
+  };
+
+  const handleRecharge = async (e) => {
+    e.preventDefault();
+    setRechargeLoading(true);
+    try {
+      const response = await Apihelper.RechargeAdWallet(rechargeAd._id, {
+        amount: parseFloat(rechargeAmount),
+        method: 'manual'
+      });
+      setUserWalletBalance(response.data.userWalletBalance);
+      setRechargeAd(null);
+      setRechargeAmount('');
+      fetchAds();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Recharge failed');
+      // Auto-close error after 3 seconds
+      setTimeout(() => setError(''), 3000);
+    } finally {
+      setRechargeLoading(false);
     }
   };
 
@@ -142,13 +194,61 @@ const MyAdsPage = () => {
      
 
         {/* Performance Overview */}
-      
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Campaigns</p>
+                <p className="text-3xl font-bold text-gray-900">{ads.length}</p>
+              </div>
+              <div className="p-3 bg-blue-100 rounded-2xl">
+                <Target className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Impressions</p>
+                <p className="text-3xl font-bold text-blue-600">{totalImpressions.toLocaleString()}</p>
+              </div>
+              <div className="p-3 bg-blue-100 rounded-2xl">
+                <Eye className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Clicks</p>
+                <p className="text-3xl font-bold text-green-600">{totalClicks.toLocaleString()}</p>
+              </div>
+              <div className="p-3 bg-green-100 rounded-2xl">
+                <MousePointer className="w-6 h-6 text-green-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Average CTR</p>
+                <p className="text-3xl font-bold text-purple-600">{avgCTR}%</p>
+              </div>
+              <div className="p-3 bg-purple-100 rounded-2xl">
+                <TrendingUp className="w-6 h-6 text-purple-600" />
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Controls */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-6 mb-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-4 sm:p-6 mb-8">
+          <div className="flex flex-col gap-4">
             {/* Search */}
-            <div className="relative flex-1 max-w-md">
+            <div className="relative w-full max-w-md mx-auto lg:mx-0">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
@@ -159,9 +259,9 @@ const MyAdsPage = () => {
               />
             </div>
 
-            {/* View Toggle */}
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center bg-gray-100 rounded-xl p-1">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              {/* View Toggle */}
+              <div className="flex items-center bg-gray-100 rounded-xl p-1 w-fit mx-auto sm:mx-0">
                 <button
                   onClick={() => setViewMode('table')}
                   className={`p-2 rounded-lg transition-all ${
@@ -186,7 +286,7 @@ const MyAdsPage = () => {
 
               <button 
                 onClick={() => window.location.href = '/create-ad'}
-                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg flex items-center space-x-2"
+                className="w-full sm:w-auto px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2"
               >
                 <Plus className="w-5 h-5" />
                 <span>Create Campaign</span>
@@ -196,12 +296,20 @@ const MyAdsPage = () => {
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-2xl p-6 mb-8 flex items-center">
-            <AlertCircle className="w-6 h-6 text-red-600 mr-3 flex-shrink-0" />
-            <div>
-              <h4 className="font-semibold text-red-800 mb-1">Campaign Management Error</h4>
-              <p className="text-red-700">{error}</p>
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-6 mb-8 flex items-center justify-between">
+            <div className="flex items-center">
+              <AlertCircle className="w-6 h-6 text-red-600 mr-3 flex-shrink-0" />
+              <div>
+                <h4 className="font-semibold text-red-800 mb-1">Error</h4>
+                <p className="text-red-700">{error}</p>
+              </div>
             </div>
+            <button
+              onClick={() => setError('')}
+              className="p-1 hover:bg-red-100 rounded-lg transition-colors"
+            >
+              <X className="w-5 h-5 text-red-600" />
+            </button>
           </div>
         )}
 
@@ -226,15 +334,15 @@ const MyAdsPage = () => {
           /* Table View */
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[800px]">
                 <thead className="bg-gray-50/80">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Campaign</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Media</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Performance</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Targeting</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Actions</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Campaign</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Media</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Status</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Performance</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900 hidden lg:table-cell">Targeting</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -329,6 +437,13 @@ const MyAdsPage = () => {
                               <Eye className="w-4 h-4" />
                             </button>
                             <button 
+                              onClick={() => window.open(`/embed-code/${ad._id}`, '_blank')}
+                              className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                              title="Get Embed Code"
+                            >
+                              <Code className="w-4 h-4" />
+                            </button>
+                            <button 
                               onClick={() => handleEdit(ad)}
                               className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                               title="Edit Campaign"
@@ -353,7 +468,7 @@ const MyAdsPage = () => {
           </div>
         ) : (
           /* Grid View */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {filteredAds.map((ad) => {
               const MediaIcon = getMediaIcon(ad.mediaType);
               const ctr = ad.analytics?.impressions > 0 
@@ -418,7 +533,7 @@ const MyAdsPage = () => {
                     </div>
 
                     {/* Performance Metrics */}
-                    <div className="grid grid-cols-3 gap-3 mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
                       <div className="text-center p-3 bg-blue-50 rounded-xl">
                         <Eye className="w-4 h-4 text-blue-600 mx-auto mb-1" />
                         <p className="text-lg font-bold text-blue-900">{(ad.analytics?.impressions || 0).toLocaleString()}</p>
@@ -438,6 +553,13 @@ const MyAdsPage = () => {
                       </div>
                     </div>
 
+                    {/* Wallet Balance */}
+                    <div className="text-center p-3 bg-orange-50 rounded-xl mb-3">
+                      <DollarSign className="w-4 h-4 text-orange-600 mx-auto mb-1" />
+                      <p className="text-lg font-bold text-orange-900">${(ad.wallet?.balance || 0).toFixed(2)}</p>
+                      <p className="text-xs text-orange-700">Wallet</p>
+                    </div>
+
                     {/* Action Buttons */}
                     <div className="flex space-x-2">
                       <button 
@@ -446,6 +568,19 @@ const MyAdsPage = () => {
                       >
                         <Eye className="w-4 h-4" />
                         <span>View</span>
+                      </button>
+                      <button 
+                        onClick={() => window.open(`/embed-code/${ad._id}`, '_blank')}
+                        className="px-4 py-2 bg-purple-600 text-white font-medium rounded-xl hover:bg-purple-700 transition-colors"
+                        title="Get Embed Code"
+                      >
+                        <Code className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => setRechargeAd(ad)}
+                        className="px-4 py-2 bg-orange-600 text-white font-medium rounded-xl hover:bg-orange-700 transition-colors"
+                      >
+                        <DollarSign className="w-4 h-4" />
                       </button>
                       <button 
                         onClick={() => handleEdit(ad)}
@@ -529,15 +664,32 @@ const MyAdsPage = () => {
                           <label className="text-sm font-medium text-gray-600">Destination URL</label>
                           <p className="text-lg font-semibold text-blue-600 break-all">{viewingAd.clickUrl}</p>
                         </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-600">Status</label>
-                          <div className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-semibold ${
-                            viewingAd.isActive 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-gray-100 text-gray-800'
-                          }`}>
-                            {viewingAd.isActive ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
-                            <span>{viewingAd.isActive ? 'Live' : 'Paused'}</span>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium text-gray-600">Status</label>
+                            <div className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-semibold ${
+                              viewingAd.isActive 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {viewingAd.isActive ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
+                              <span>{viewingAd.isActive ? 'Live' : 'Paused'}</span>
+                            </div>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-600">Wallet Balance</label>
+                            <div className="flex items-center space-x-2">
+                              <p className="text-lg font-semibold text-green-600">${(viewingAd.wallet?.balance || 0).toFixed(2)}</p>
+                              <button
+                                onClick={() => {
+                                  setViewingAd(null);
+                                  setRechargeAd(viewingAd);
+                                }}
+                                className="px-3 py-1 bg-orange-600 text-white text-sm rounded-lg hover:bg-orange-700"
+                              >
+                                Recharge
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -546,7 +698,7 @@ const MyAdsPage = () => {
                     {/* Performance */}
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Metrics</h3>
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-4 gap-4">
                         <div className="text-center p-4 bg-blue-50 rounded-xl">
                           <Eye className="w-6 h-6 text-blue-600 mx-auto mb-2" />
                           <p className="text-2xl font-bold text-blue-900">{(viewingAd.analytics?.impressions || 0).toLocaleString()}</p>
@@ -567,6 +719,12 @@ const MyAdsPage = () => {
                               : 0}%
                           </p>
                           <p className="text-sm text-purple-700">CTR</p>
+                        </div>
+                        
+                        <div className="text-center p-4 bg-orange-50 rounded-xl">
+                          <DollarSign className="w-6 h-6 text-orange-600 mx-auto mb-2" />
+                          <p className="text-2xl font-bold text-orange-900">${(viewingAd.wallet?.balance || 0).toFixed(2)}</p>
+                          <p className="text-sm text-orange-700">Wallet Balance</p>
                         </div>
                       </div>
                     </div>
@@ -711,17 +869,96 @@ const MyAdsPage = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
-                      id="isActive"
-                      checked={editingAd.isActive}
-                      onChange={(e) => setEditingAd({...editingAd, isActive: e.target.checked})}
-                      className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
-                    />
-                    <label htmlFor="isActive" className="text-sm font-medium text-gray-700">
-                      Campaign is active and live
-                    </label>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-800 mb-3">Target Devices</label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {['web', 'mobile', 'tablet'].map(device => (
+                        <label key={device} className="flex items-center space-x-2 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={editingAd.targetDevices?.includes(device)}
+                            onChange={(e) => {
+                              const devices = editingAd.targetDevices || [];
+                              if (e.target.checked) {
+                                setEditingAd({...editingAd, targetDevices: [...devices, device]});
+                              } else {
+                                setEditingAd({...editingAd, targetDevices: devices.filter(d => d !== device)});
+                              }
+                            }}
+                            className="w-4 h-4 text-blue-600 rounded"
+                          />
+                          <span className="text-sm font-medium text-gray-700 capitalize">{device}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-800 mb-3">Target Platforms</label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {['html', 'react', 'php', 'java', 'flutter', 'swift'].map(platform => (
+                        <label key={platform} className="flex items-center space-x-2 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={editingAd.targetPlatforms?.includes(platform)}
+                            onChange={(e) => {
+                              const platforms = editingAd.targetPlatforms || [];
+                              if (e.target.checked) {
+                                setEditingAd({...editingAd, targetPlatforms: [...platforms, platform]});
+                              } else {
+                                setEditingAd({...editingAd, targetPlatforms: platforms.filter(p => p !== platform)});
+                              }
+                            }}
+                            className="w-4 h-4 text-blue-600 rounded"
+                          />
+                          <span className="text-sm font-medium text-gray-700 uppercase">{platform}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          id="isActive"
+                          checked={editingAd.isActive}
+                          onChange={(e) => setEditingAd({...editingAd, isActive: e.target.checked})}
+                          className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+                        />
+                        <label htmlFor="isActive" className="text-sm font-medium text-gray-700">
+                          Campaign Status
+                        </label>
+                      </div>
+                      <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        editingAd.isActive 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {editingAd.isActive ? 'Active' : 'Inactive'}
+                      </div>
+                    </div>
+                    
+                    <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="font-semibold text-orange-900">Ad Wallet Balance</h4>
+                          <p className="text-2xl font-bold text-orange-600">${(editingAd.wallet?.balance || 0).toFixed(2)}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingAd(null);
+                            setRechargeAd(editingAd);
+                          }}
+                          className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 flex items-center space-x-2"
+                        >
+                          <DollarSign className="w-4 h-4" />
+                          <span>Recharge</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="flex space-x-4 pt-6 border-t border-gray-200">
@@ -748,6 +985,85 @@ const MyAdsPage = () => {
                           <span>Update Campaign</span>
                         </>
                       )}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Recharge Modal */}
+        {rechargeAd && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">Recharge Ad Wallet</h2>
+                    <p className="text-gray-600">{rechargeAd.title}</p>
+                  </div>
+                  <button 
+                    onClick={() => setRechargeAd(null)}
+                    className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                  >
+                    <X className="w-5 h-5 text-gray-500" />
+                  </button>
+                </div>
+                
+                <div className="mb-6 space-y-4">
+                  <div className="bg-gray-50 rounded-xl p-4 text-center">
+                    <p className="text-sm text-gray-600">Ad Wallet Balance</p>
+                    <p className="text-2xl font-bold text-green-600">${(rechargeAd.wallet?.balance || 0).toFixed(2)}</p>
+                  </div>
+                  
+                  <div className="bg-blue-50 rounded-xl p-4 text-center">
+                    <p className="text-sm text-gray-600">Your Main Wallet</p>
+                    <p className="text-2xl font-bold text-blue-600">${userWalletBalance.toFixed(2)}</p>
+                  </div>
+                </div>
+                
+                <form onSubmit={handleRecharge}>
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Recharge Amount</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      value={rechargeAmount}
+                      onChange={(e) => setRechargeAmount(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter amount"
+                      required
+                    />
+                    <div className="flex space-x-2 mt-3">
+                      {[1, 5, 10, 25, 50].map(amount => (
+                        <button
+                          key={amount}
+                          type="button"
+                          onClick={() => setRechargeAmount(amount.toString())}
+                          className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm"
+                        >
+                          ${amount}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-3">
+                    <button
+                      type="button"
+                      onClick={() => setRechargeAd(null)}
+                      className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={rechargeLoading}
+                      className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50"
+                    >
+                      {rechargeLoading ? 'Processing...' : 'Recharge'}
                     </button>
                   </div>
                 </form>

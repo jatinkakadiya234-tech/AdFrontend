@@ -35,14 +35,14 @@ const ActiveAdsPage = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Loading active ads...</div>;
+    return <div className="flex justify-center items-center h-64 p-4">Loading active ads...</div>;
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Active Advertisements</h1>
-        <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+    <div className="space-y-6 p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Active Advertisements</h1>
+        <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm w-fit">
           {ads.length} Active Ads
         </div>
       </div>
@@ -61,11 +61,11 @@ const ActiveAdsPage = () => {
       ) : (
         <div className="space-y-4">
           {ads.map((ad) => (
-            <div key={ad._id} className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-start space-x-6">
+            <div key={ad._id} className="bg-white rounded-lg shadow-sm border p-4 sm:p-6 hover:shadow-md transition-shadow">
+              <div className="flex flex-col lg:flex-row lg:items-start space-y-4 lg:space-y-0 lg:space-x-6">
                 {/* Ad Media */}
                 <div 
-                  className="w-48 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer flex-shrink-0"
+                  className="w-full lg:w-48 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer flex-shrink-0"
                   onClick={() => handleAdClick(ad)}
                 >
                   {ad.mediaType === 'video' ? (
@@ -85,19 +85,19 @@ const ActiveAdsPage = () => {
 
                 {/* Ad Details */}
                 <div className="flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-semibold text-gray-900">{ad.title}</h3>
-                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2">
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900">{ad.title}</h3>
+                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs w-fit">
                       Active
                     </span>
                   </div>
                   
-                  <p className="text-gray-600 mb-3">
+                  <p className="text-gray-600 mb-3 text-sm sm:text-base">
                     Size: {ad.width}x{ad.height}px • Type: {ad.mediaType.toUpperCase()}
                   </p>
 
                   {/* Performance Stats */}
-                  <div className="grid grid-cols-3 gap-4 mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                     <div className="bg-blue-50 p-3 rounded-lg">
                       <div className="text-blue-900 font-semibold text-lg">
                         {ad.analytics?.impressions || 0}
@@ -120,11 +120,11 @@ const ActiveAdsPage = () => {
                   </div>
 
                   {/* Target Info */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-sm text-gray-500 mr-2">Devices:</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-sm text-gray-500">Devices:</span>
                       {ad.targetDevices?.map(device => (
-                        <span key={device} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded mr-1">
+                        <span key={device} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
                           {device}
                         </span>
                       ))}
@@ -132,7 +132,7 @@ const ActiveAdsPage = () => {
                     
                     <button 
                       onClick={() => handleAdClick(ad)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto"
                     >
                       Visit Ad
                     </button>

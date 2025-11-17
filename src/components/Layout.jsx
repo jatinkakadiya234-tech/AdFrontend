@@ -10,7 +10,9 @@ import {
   MdCategory, 
   MdSettings, 
   MdGroup, 
-  MdPerson 
+  MdPerson,
+  MdAccountBalanceWallet,
+  MdVisibility 
 } from 'react-icons/md';
 import Apihelper from '../service/Apihelper';
 
@@ -26,8 +28,10 @@ const Layout = () => {
       const userData = localStorage.getItem('user');
       const token = localStorage.getItem('token');
       
+      console.log('Checking user auth:', { userData: !!userData, token: !!token });
+      
       if (!userData || !token) {
-        // Clear any remaining data and redirect
+        console.log('No auth data, redirecting to login');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate('/login');
@@ -36,8 +40,9 @@ const Layout = () => {
       
       try {
         const parsedUser = JSON.parse(userData);
+        console.log('Parsed user:', parsedUser);
         if (!parsedUser.id || !parsedUser.role) {
-          // Invalid user data
+          console.log('Invalid user data');
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           navigate('/login');
@@ -45,7 +50,7 @@ const Layout = () => {
         }
         setUser(parsedUser);
       } catch (error) {
-        // Invalid JSON
+        console.log('JSON parse error:', error);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate('/login');
@@ -92,7 +97,9 @@ const Layout = () => {
           { name: 'Create Ad', path: '/create-ad', icon: MdAdd },
           { name: 'My Ads', path: '/my-ads', icon: MdDescription },
           { name: 'Analytics', path: '/analytics', icon: MdAnalytics },
+          { name: 'Impressions', path: '/impressions', icon: MdVisibility },
           { name: 'Categories', path: '/categories', icon: MdCategory },
+          { name: 'Wallet', path: '/wallet', icon: MdAccountBalanceWallet },
           { name: 'Settings', path: '/settings', icon: MdSettings }
         ];
       case 'admin':
@@ -101,6 +108,9 @@ const Layout = () => {
           { name: 'Advertisers', path: '/advertisers', icon: MdGroup },
           { name: 'Users', path: '/users', icon: MdPerson },
           { name: 'Analytics', path: '/analytics', icon: MdAnalytics },
+          { name: 'Impressions', path: '/impressions', icon: MdVisibility },
+          { name: 'Categories', path: '/categories', icon: MdCategory },
+          { name: 'Wallet', path: '/wallet', icon: MdAccountBalanceWallet },
           { name: 'Settings', path: '/settings', icon: MdSettings }
         ];
       default:
