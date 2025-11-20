@@ -39,8 +39,8 @@ const AdvertisersPage = () => {
 
   const fetchAdvertisers = async () => {
     try {
-      // This would be a new API endpoint to get all advertisers
-      const response = await Apihelper.GetAllUsers({ role: 'advertiser' });
+      // Get advertisers using the correct API method
+      const response = await Apihelper.GetUsersByRole('advertiser');
       setAdvertisers(response.data.users || []);
     } catch (err) {
       setError('Failed to fetch advertisers');

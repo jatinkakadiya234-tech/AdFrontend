@@ -1,43 +1,35 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { isAuthenticated, getCurrentUser } from '../utils/authUtils';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, requiredRole }) => {
   const [isValid, setIsValid] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem('token');
-      const user = localStorage.getItem('user');
-      
-      if (!token || !user) {
-        // Clear any remaining data
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+      if (!isAuthenticated()) {
         setIsValid(false);
         return;
       }
 
-      try {
-        // Validate user data
-        const userData = JSON.parse(user);
-        if (!userData.id || !userData.role) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          setIsValid(false);
-          return;
-        }
-        setIsValid(true);
-      } catch (error) {
-        // Invalid user data
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+      const user = getCurrentUser();
+      if (!user || !user.id) {
         setIsValid(false);
+        return;
       }
+
+      // Check role if required
+      if (requiredRole && user.role !== requiredRole) {
+        setIsValid(false);
+        return;
+      }
+
+      setIsValid(true);
     };
 
     checkAuth();
-  }, [location.pathname]);
+  }, [location.pathname, requiredRole]);
 
   if (isValid === null) {
     return (

@@ -8,6 +8,7 @@ const Register = ({ onRegister, switchToLogin }) => {
     email: '', 
     password: '', 
     confirmPassword: '',
+    role: 'viewer',
     profile: {}
   });
   const naviget = useNavigate()
@@ -101,6 +102,19 @@ const Register = ({ onRegister, switchToLogin }) => {
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                     required
                   />
+                </div>
+
+                <div>
+                  <select
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={formData.role}
+                    onChange={(e) => setFormData({...formData, role: e.target.value})}
+                    required
+                  >
+                    <option value="viewer">Viewer - Browse and view ads</option>
+                    <option value="publisher">Publisher - Create and manage campaigns</option>
+                    <option value="admin">Admin - Full system access</option>
+                  </select>
                 </div>
 
                 <div>

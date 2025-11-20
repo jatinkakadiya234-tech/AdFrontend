@@ -26,74 +26,9 @@ const Apihelper = {
     return axios.post(url + "/user/logout")
   },
   
-  // SuperAdmin APIs
-  SuperAdminRegister: (data) => {
-    return axios.post(url + "/superadmin/register", data)
-  },
-  SuperAdminLogin: (data) => {
-    return axios.post(url + "/superadmin/login", data)
-  },
-  GetDashboardStats: () => {
-    return axios.get(url + "/superadmin/dashboard")
-  },
-  GetAllUsers: (params) => {
-    return axios.get(url + "/superadmin/users", { params })
-  },
-  UpdateUserStatus: (userId, role, data) => {
-    return axios.put(url + `/superadmin/users/${userId}/${role}/status`, data)
-  },
-  DeleteUser: (userId, role) => {
-    return axios.delete(url + `/superadmin/users/${userId}/${role}`)
-  },
+
   
-  // Advertiser APIs
-  AdvertiserLogin: (data) => {
-    return axios.post(url + "/advertiser/login", data)
-  },
-  GetAdvertiserProfile: () => {
-    return axios.get(url + "/advertiser/profile")
-  },
-  UpdateAdvertiserProfile: (data) => {
-    return axios.put(url + "/advertiser/profile", data)
-  },
-  AddFunds: (data) => {
-    return axios.post(url + "/advertiser/wallet/add-funds", data)
-  },
-  GetAdvertiserTransactions: (params) => {
-    return axios.get(url + "/advertiser/wallet/transactions", { params })
-  },
-  GetAdvertiserAnalytics: () => {
-    return axios.get(url + "/advertiser/analytics")
-  },
-  
-  // Publisher APIs
-  PublisherLogin: (data) => {
-    return axios.post(url + "/publisher/login", data)
-  },
-  GetPublisherProfile: () => {
-    return axios.get(url + "/publisher/profile")
-  },
-  UpdatePublisherProfile: (data) => {
-    return axios.put(url + "/publisher/profile", data)
-  },
-  AddAdSpace: (data) => {
-    return axios.post(url + "/publisher/ad-spaces", data)
-  },
-  UpdateAdSpace: (adSpaceId, data) => {
-    return axios.put(url + `/publisher/ad-spaces/${adSpaceId}`, data)
-  },
-  DeleteAdSpace: (adSpaceId) => {
-    return axios.delete(url + `/publisher/ad-spaces/${adSpaceId}`)
-  },
-  GetPublisherEarnings: (params) => {
-    return axios.get(url + "/publisher/earnings", { params })
-  },
-  RequestPayout: (data) => {
-    return axios.post(url + "/publisher/payout/request", data)
-  },
-  GetPublisherAnalytics: () => {
-    return axios.get(url + "/publisher/analytics")
-  },
+
   
   // Join Request APIs
   SubmitJoinRequest: (data) => {
@@ -143,41 +78,10 @@ const Apihelper = {
     return axios.get(url + `/category/${id}/trends`, { params })
   },
   
-  // Ad APIs
-  CreateAd: (data) => {
-    return axios.post(url + "/ad/create", data, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-  },
-  GetAds: (params) => {
-    return axios.get(url + "/ad/ads", { params })
-  },
-  GetAllAds: (params) => {
-    return axios.get(url + "/ad/all", { params })
-  },
-  UpdateAd: (id, data) => {
-    return axios.put(url + `/ad/update/${id}`, data, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-  },
-  DeleteAd: (id) => {
-    return axios.delete(url + `/ad/delete/${id}`)
-  },
-  GetAdAnalytics: (id) => {
-    return axios.get(url + `/ad/analytics/${id}`)
-  },
-  GetDetailedAnalytics: (params) => {
-    return axios.get(url + "/ad/detailed-analytics", { params })
-  },
-  GetAdByDevice: (id, params) => {
-    return axios.get(url + `/ad/${id}`, { params })
-  },
-  TrackClick: (id, data) => {
-    return axios.post(url + `/ad/click/${id}`, data)
-  },
+
   
   // Dashboard APIs
-  GetDashboardStats: () => {
+  GetUserDashboardStats: () => {
     return axios.get(url + "/user/dashboard-stats")
   },
   GetAdvertiserAnalytics: () => {
@@ -205,26 +109,92 @@ const Apihelper = {
     return axios.post(url + "/user/wallet/add", data)
   },
   
-  // Impression Tracking APIs
-  TrackImpression: (id, data) => {
-    return axios.post(url + `/ad/impression/${id}`, data)
+
+  
+  // Campaign APIs
+  CreateCampaign: (data) => {
+    return axios.post(url + "/campaign/create", data, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   },
-  GetImpressionStats: (id, params) => {
-    return axios.get(url + `/ad/impression/${id}/stats`, { params })
+  GetMyCampaigns: (params) => {
+    return axios.get(url + "/campaign/my-campaigns", { params })
   },
-  GetTopAds: (params) => {
-    return axios.get(url + "/ad/impression/top", { params })
+  GetCampaign: (id) => {
+    return axios.get(url + `/campaign/${id}`)
   },
-  GetImpressionSummary: () => {
-    return axios.get(url + "/ad/impression/summary")
+  UpdateCampaign: (id, data) => {
+    return axios.put(url + `/campaign/${id}`, data)
+  },
+  DeleteCampaign: (id) => {
+    return axios.delete(url + `/campaign/${id}`)
+  },
+  SubmitCampaignForReview: (id) => {
+    return axios.post(url + `/campaign/${id}/submit-review`)
+  },
+  ActivateCampaign: (id) => {
+    return axios.post(url + `/campaign/${id}/activate`)
+  },
+  ToggleCampaignStatus: (id) => {
+    return axios.post(url + `/campaign/${id}/toggle-status`)
+  },
+  GetCampaignAnalytics: (id) => {
+    return axios.get(url + `/campaign/${id}/analytics`)
   },
   
-  // Ad Wallet APIs
-  RechargeAdWallet: (id, data) => {
-    return axios.post(url + `/ad/wallet/${id}/recharge`, data)
+  // Publisher Profile APIs
+  CheckPublisherProfile: () => {
+    return axios.get(url + "/user/publisher/profile-status")
   },
-  GetAdWallet: (id) => {
-    return axios.get(url + `/ad/wallet/${id}`)
+  UpdateUserProfile: (data) => {
+    return axios.put(url + "/user/profile", data)
+  },
+  
+  // Admin APIs
+  GetUsersByRole: (role) => {
+    return axios.get(url + `/user/users?role=${role}`)
+  },
+  GetDashboardStats: () => {
+    return axios.get(url + "/user/dashboard-stats")
+  },
+  
+  // Campaign Management APIs
+  GetAllCampaigns: (params) => {
+    return axios.get(url + "/campaign/all", { params })
+  },
+  GetPendingCampaigns: () => {
+    return axios.get(url + "/campaign/pending")
+  },
+  ApproveCampaign: (id, notes) => {
+    return axios.post(url + `/campaign/${id}/approve`, { notes })
+  },
+  RejectCampaign: (id, reason, notes) => {
+    return axios.post(url + `/campaign/${id}/reject`, { reason, notes })
+  },
+  SubmitCampaignForReview: (id) => {
+    return axios.post(url + `/campaign/${id}/submit-review`)
+  },
+  
+  // Campaign Tracking APIs
+  TrackCampaignClick: (id) => {
+    return axios.post(url + `/campaign/${id}/click`)
+  },
+  TrackCampaignImpression: (id) => {
+    return axios.post(url + `/campaign/${id}/impression`)
+  },
+  
+  // Admin User Management APIs
+  GetAllUsers: () => {
+    return axios.get(url + "/user/all")
+  },
+  BanUser: (id, reason) => {
+    return axios.post(url + `/user/${id}/ban`, { reason })
+  },
+  UnbanUser: (id) => {
+    return axios.post(url + `/user/${id}/unban`)
+  },
+  DeleteUser: (id) => {
+    return axios.delete(url + `/user/${id}`)
   }
 }
 

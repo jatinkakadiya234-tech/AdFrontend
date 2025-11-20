@@ -86,36 +86,46 @@ const Layout = () => {
     switch (role) {
       case 'viewer':
         return [
-          { name: 'Dashboard', path: '/dashboard', icon: MdDashboard },
-          { name: 'Ad List', path: '/ad-list', icon: MdList },
-          { name: 'Active Ads', path: '/active-ads', icon: MdCheckCircle },
-          { name: 'Analytics', path: '/analytics', icon: MdAnalytics }
+          { name: 'Dashboard', path: '/app/dashboard', icon: MdDashboard },
+          { name: 'Ad List', path: '/app/ad-list', icon: MdList },
+          { name: 'Active Ads', path: '/app/active-ads', icon: MdCheckCircle },
+          { name: 'Analytics', path: '/app/analytics', icon: MdAnalytics }
         ];
       case 'advertiser':
         return [
-          { name: 'Dashboard', path: '/dashboard', icon: MdDashboard },
-          { name: 'Create Ad', path: '/create-ad', icon: MdAdd },
-          { name: 'My Ads', path: '/my-ads', icon: MdDescription },
-          { name: 'Analytics', path: '/analytics', icon: MdAnalytics },
-          { name: 'Impressions', path: '/impressions', icon: MdVisibility },
-          { name: 'Categories', path: '/categories', icon: MdCategory },
-          { name: 'Wallet', path: '/wallet', icon: MdAccountBalanceWallet },
-          { name: 'Settings', path: '/settings', icon: MdSettings }
+          { name: 'Dashboard', path: '/app/dashboard', icon: MdDashboard },
+          { name: 'Create Ad', path: '/app/create-ad', icon: MdAdd },
+          { name: 'My Ads', path: '/app/my-ads', icon: MdDescription },
+          { name: 'Analytics', path: '/app/analytics', icon: MdAnalytics },
+          { name: 'Impressions', path: '/app/impressions', icon: MdVisibility },
+          { name: 'Categories', path: '/app/categories', icon: MdCategory },
+          { name: 'Wallet', path: '/app/wallet', icon: MdAccountBalanceWallet },
+          { name: 'Settings', path: '/app/settings', icon: MdSettings }
+        ];
+      case 'publisher':
+        return [
+          { name: 'Publisher Dashboard', path: '/app/publisher', icon: MdDashboard },
+          { name: 'Create Category', path: '/app/create-category', icon: MdAdd },
+          { name: 'Categories', path: '/app/categories', icon: MdCategory },
+          { name: 'Analytics', path: '/app/analytics', icon: MdAnalytics },
+          { name: 'Wallet', path: '/app/wallet', icon: MdAccountBalanceWallet },
+          { name: 'Settings', path: '/app/settings', icon: MdSettings }
         ];
       case 'admin':
         return [
-          { name: 'Dashboard', path: '/dashboard', icon: MdDashboard },
-          { name: 'Advertisers', path: '/advertisers', icon: MdGroup },
-          { name: 'Users', path: '/users', icon: MdPerson },
-          { name: 'Analytics', path: '/analytics', icon: MdAnalytics },
-          { name: 'Impressions', path: '/impressions', icon: MdVisibility },
-          { name: 'Categories', path: '/categories', icon: MdCategory },
-          { name: 'Wallet', path: '/wallet', icon: MdAccountBalanceWallet },
-          { name: 'Settings', path: '/settings', icon: MdSettings }
+          { name: 'Dashboard', path: '/app/dashboard', icon: MdDashboard },
+          { name: 'Campaign Management', path: '/app/admin-campaigns', icon: MdDescription },
+          { name: 'Advertisers', path: '/app/advertisers', icon: MdGroup },
+          { name: 'Users', path: '/app/users', icon: MdPerson },
+          { name: 'Analytics', path: '/app/analytics', icon: MdAnalytics },
+          { name: 'Impressions', path: '/app/impressions', icon: MdVisibility },
+          { name: 'Categories', path: '/app/categories', icon: MdCategory },
+          { name: 'Wallet', path: '/app/wallet', icon: MdAccountBalanceWallet },
+          { name: 'Settings', path: '/app/settings', icon: MdSettings }
         ];
       default:
         return [
-          { name: 'Dashboard', path: '/dashboard', icon: MdDashboard }
+          { name: 'Dashboard', path: '/app/dashboard', icon: MdDashboard }
         ];
     }
   };
@@ -173,7 +183,7 @@ const Layout = () => {
                     <p className="text-xs text-gray-500">{user?.email || 'user@example.com'}</p>
                   </div>
                   <button 
-                    onClick={() => navigate('/profile')}
+                    onClick={() => navigate('/app/profile')}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     View Profile
