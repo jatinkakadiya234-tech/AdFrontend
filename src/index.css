@@ -1,3 +1,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom Ant Design Table Styles */
+.custom-table .ant-table {
+  @apply text-sm;
+}
+
+.custom-table .ant-table-thead > tr > th {
+  @apply bg-gray-50 font-semibold text-gray-600 uppercase text-xs;
+}
+
+.custom-table .ant-table-tbody > tr:hover > td {
+  @apply bg-gray-50;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-lg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-lg hover:bg-gray-400;
+}
+
+/* Smooth Transitions */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Custom Table Styles */
+.custom-table .ant-table {
+  font-size: 14px;
+}
+
+.custom-table .ant-table-thead > tr > th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #4b5563;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.custom-table .ant-table-tbody > tr:hover > td {
+  background-color: #f9fafb;
+}
+
+.custom-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+/* Dropdown Menu Styles */
+.ant-dropdown-menu-item {
+  padding: 8px 12px;
+}
+
+.ant-dropdown-menu-item:hover {
+  background-color: #f3f4f6;
+}

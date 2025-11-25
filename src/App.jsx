@@ -4,7 +4,7 @@ import "./App.css";
 import Layout from "./components/Layout";
 import LandingPage from "./components/LandingPage";
 import AuthContainer from "./auth/AuthContainer";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./Routes/ProtectedRoute";
 import AuthTest from "./components/AuthTest";
 import { appRoutes } from "./Routes/Routes";
 

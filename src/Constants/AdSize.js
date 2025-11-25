@@ -1,3 +1,5 @@
+import { Gift, Link2, Maximize2, Monitor } from "lucide-react";
+
 export const AD_SIZES = {
   MEDIUM_RECTANGLE: { value: "300x250", label: "300×250 (Medium Rectangle)" },
   LARGE_RECTANGLE: { value: "336x280", label: "336×280 (Large Rectangle)" },
@@ -9,3 +11,11 @@ export const AD_SIZES = {
 
 // For easy iteration (like mapping inside a select or button group)
 export const AD_SIZE_LIST = Object.values(AD_SIZES);
+
+
+export const adTypes = [
+  { value: 'Banner Ads', icon: Monitor, color: 'purple' },
+  { value: 'Rewarded Ads', icon: Gift, color: 'green' },
+  { value: 'Interstitial Ads', icon: Maximize2, color: 'blue' },
+  { value: 'URL Shortener', icon: Link2, color: 'orange' },
+];

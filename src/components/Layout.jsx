@@ -26,7 +26,8 @@ import {
   MdSmartphone,
   MdAdd,
   MdVisibility,
-  MdPerson
+  MdPerson,
+  MdOutlineDrafts
 } from 'react-icons/md';
 import { SiOpenjdk, SiFlutter } from 'react-icons/si';
 import { FaApple, FaReact, FaBullhorn } from 'react-icons/fa';
@@ -42,7 +43,18 @@ import {
   CreditCard,
   Users,
   HelpCircle,
-  BookOpen
+  BookOpen,
+  List,
+  Plus,
+  Wallet,
+  TrendingUp,
+  Settings,
+  Settings2,
+  User2,
+  Layers,
+  Layers2,
+  Lock,
+  Image
 } from 'lucide-react';
 import Apihelper from '../service/Apihelper';
 
@@ -191,9 +203,9 @@ const Layout = () => {
               name: 'Java',
               icon: SiOpenjdk,
               subOptions: [
-                { name: 'Setup Guide', path: '/app/java-sdk-installation', icon: MdDownload },
+                { name: 'Setup Guide', path: '/app/java-setup', icon: MdDownload },
                 { name: 'Gradle Dependency', path: '/app/java-gradle', icon: MdCode },
-                { name: 'AndroidManifest', path: '/app/java-android-manifest', icon: MdSettings },
+                { name: 'AndroidManifest', path: '/app/java-manifest', icon: MdSettings },
                 { name: 'Advanced', path: '/app/java-advanced', icon: LucideWrench },
               ],
             },
@@ -202,8 +214,8 @@ const Layout = () => {
               icon: SiFlutter,
               subOptions: [
                 { name: 'Setup Guide', path: '/app/flutter-setup', icon: MdDownload },
-                { name: 'Pub.dev Setup', path: '/app/flutter-pub', icon: PiPuzzlePieceLight },
-                { name: 'Dart Examples', path: '/app/flutter-dart', icon: MdCode },
+                { name: 'Pub.dev Setup', path: '/app/flutter-pubdev', icon: PiPuzzlePieceLight },
+                { name: 'Dart Examples', path: '/app/flutter-examples', icon: MdCode },
                 { name: 'Advanced', path: '/app/flutter-advanced', icon: MdSettings },
               ],
             },
@@ -212,7 +224,7 @@ const Layout = () => {
               icon: FaApple,
               subOptions: [
                 { name: 'Setup Guide', path: '/app/ios-setup', icon: MdDownload },
-                { name: 'Implementation Example', path: '/app/ios-implementation', icon: MdCode },
+                { name: 'Implementation Example', path: '/app/ios-examples', icon: MdCode },
                 { name: 'Delegate Method', path: '/app/ios-delegate', icon: PiBracketsCurlyLight },
                 { name: 'Advanced', path: '/app/ios-advanced', icon: LucideSmartphone },
               ],
@@ -231,14 +243,14 @@ const Layout = () => {
         {
           name: 'Manage Platforms',
           icon: MdApps,
-           path: '/app/property-management',
+          path: '/app/property-management',
         },
         {
           name: 'Billing & Payments',
           icon: CreditCard,
           subOptions: [
-            { name: 'Payment Methods', path: '/app/payment-methods', icon: MdAccountBalanceWallet },
-            { name: 'Billing History', path: '/app/billing-history', icon: MdList },
+            { name: 'Payment Methods', path: '/app/payment-method', icon: MdAccountBalanceWallet },
+            { name: 'Billing History', path: '/app/payment-history', icon: MdList },
             { name: 'Invoices', path: '/app/invoices', icon: FileText },
           ],
         },
@@ -247,86 +259,61 @@ const Layout = () => {
           icon: HelpCircle,
           subOptions: [
             { name: 'Help Center', path: '/app/help-center', icon: MdSupport },
-            { name: 'Contact Support', path: '/app/contact-support', icon: Users },
+            { name: 'Contact Support', path: '/app/contact', icon: Users },
             { name: 'Documentation', path: '/app/documentation', icon: BookOpen },
           ],
         },
       ],
-      advertiser: [
-        {
-          name: 'Dashboard',
-          path: '/app/dashboard',
-          icon: MdDashboard,
-        },
-        {
-          name: 'Campaign Management',
-          icon: MdDescription,
-          subOptions: [
-            { name: 'Create Ad', path: '/app/create-ad', icon: MdAdd },
-            { name: 'My Ads', path: '/app/my-ads', icon: MdList },
-            { name: 'Campaign Analytics', path: '/app/campaign-analytics', icon: MdAnalytics },
-          ],
-        },
-        {
-          name: 'Performance',
-          icon: BarChart3,
-          subOptions: [
-            { name: 'Analytics Overview', path: '/app/analytics', icon: MdDashboard },
-            { name: 'Impressions', path: '/app/impressions', icon: MdVisibility },
-            { name: 'Performance Reports', path: '/app/reports', icon: MdReport },
-          ],
-        },
-        {
-          name: 'Financial',
-          icon: MdAccountBalanceWallet,
-          subOptions: [
-            { name: 'Wallet Overview', path: '/app/wallet', icon: MdAccountBalanceWallet },
-            { name: 'Payment History', path: '/app/payment-history', icon: MdPayments },
-            { name: 'Billing Settings', path: '/app/billing-settings', icon: MdSettings },
-          ],
-        },
-        {
-          name: 'Settings',
-          path: '/app/settings',
-          icon: MdSettings,
-        },
-      ],
       publisher: [
         {
-          name: 'Publisher Dashboard',
-          path: '/app/publisher',
+          name: 'Dashboard',
+          path: '/app/publisher-dashboard',
           icon: MdDashboard,
         },
         {
-          name: 'Content Management',
-          icon: MdApps,
+          name: 'Ad Campaigns',
+          icon: MdDescription,
           subOptions: [
-            { name: 'Create Category', path: '/app/create-category', icon: MdAdd },
-            { name: 'Manage Categories', path: '/app/categories', icon: MdList },
-            { name: 'Content Analytics', path: '/app/content-analytics', icon: MdAnalytics },
+            { name: 'All Campaigns', path: '/app/publisher-campaigns', icon: List },
+            { name: 'Create New Campaign', path: '/app/create-campaign', icon: Plus },
+            { name: 'Draft Campaigns', path: '/app/draft-campaigns', icon: MdOutlineDrafts },
           ],
         },
         {
-          name: 'Performance & Revenue',
+          name: 'Creatives Library',
+          path: '/app/creatives',
+          icon: Image,
+        },
+        {
+          name: 'Reports & Analytics',
+          path: '/app/reports',
           icon: BarChart3,
-          subOptions: [
-            { name: 'Revenue Analytics', path: '/app/analytics', icon: MdDashboard },
-            { name: 'Performance Reports', path: '/app/reports', icon: MdReport },
-          ],
         },
         {
-          name: 'Financial',
-          icon: MdAccountBalanceWallet,
+          name: 'Payments',
+          icon: Wallet,
           subOptions: [
-            { name: 'Wallet Management', path: '/app/wallet', icon: MdAccountBalanceWallet },
-            { name: 'Earnings Report', path: '/app/earnings', icon: MdPayments },
-            { name: 'Payout Settings', path: '/app/payout-settings', icon: MdSettings },
+            { name: 'Earnings Overview', path: '/app/earnings-overview', icon: TrendingUp },
+            { name: 'Transaction History', path: '/app/transactions', icon: CreditCard },
+            { name: 'Payment Settings', path: '/app/payment-settings', icon: Settings2 },
           ],
         },
         {
           name: 'Account Settings',
-          path: '/app/settings',
-          icon: MdSettings,
+          icon: Settings,
+          subOptions: [
+            { name: 'Profile', path: '/app/profile', icon: User2 },
+            { name: 'Platforms', path: '/app/platforms', icon: Layers2 },
+            { name: 'Security', path: '/app/security', icon: Lock },
+          ],
+        },
+        {
+          name: 'Help & Support',
+          icon: HelpCircle,
+          subOptions: [
+            { name: 'Help Center', path: '/app/help-center', icon: BookOpen },
+            { name: 'Contact Support', path: '/app/contact', icon: Users },
+          ],
         },
       ],
       admin: [
@@ -432,8 +419,8 @@ const Layout = () => {
         >
           <div className="flex items-center space-x-3 flex-1">
             <div className={`flex-shrink-0 ${iconSizeClass} flex items-center justify-center ${isActive && !hasSubOptions
-                ? 'text-blue-600'
-                : 'text-gray-500 group-hover:text-gray-700'
+              ? 'text-blue-600'
+              : 'text-gray-500 group-hover:text-gray-700'
               }`}>
               <item.icon className={iconSizeClass} />
             </div>
@@ -483,8 +470,8 @@ const Layout = () => {
                   >
                     <div className="flex items-center space-x-3 flex-1">
                       <div className={`flex-shrink-0 ${subIconSizeClass} flex items-center justify-center ${isSubItemActive && !hasSubSubOptions
-                          ? 'text-blue-600'
-                          : 'text-gray-400 group-hover:text-gray-600'
+                        ? 'text-blue-600'
+                        : 'text-gray-400 group-hover:text-gray-600'
                         }`}>
                         <subItem.icon className={subIconSizeClass} />
                       </div>
@@ -531,8 +518,8 @@ const Layout = () => {
                             >
                               <div className="flex items-center space-x-3 flex-1">
                                 <div className={`flex-shrink-0 ${subSubIconSizeClass} flex items-center justify-center ${isSubSubActive && !hasSubSubSubOptions
-                                    ? 'text-blue-600'
-                                    : 'text-gray-400 group-hover:text-gray-600'
+                                  ? 'text-blue-600'
+                                  : 'text-gray-400 group-hover:text-gray-600'
                                   }`}>
                                   <subSubItem.icon className={subSubIconSizeClass} />
                                 </div>
@@ -572,8 +559,8 @@ const Layout = () => {
                                       }}
                                     >
                                       <div className={`flex-shrink-0 ${subSubSubIconSizeClass} flex items-center justify-center ${isSubSubSubActive
-                                          ? 'text-blue-500'
-                                          : 'text-gray-400 group-hover:text-gray-500'
+                                        ? 'text-blue-500'
+                                        : 'text-gray-400 group-hover:text-gray-500'
                                         }`}>
                                         <subSubSubItem.icon className={subSubSubIconSizeClass} />
                                       </div>
