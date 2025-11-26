@@ -43,6 +43,35 @@ import HelpCenter from "../pages/Viewer/Support/HelpCenter";
 import Documentation from "../pages/Viewer/Support/Documentation";
 import KYCForm from "../components/KYCForm/KYCForm";
 import PublisherDashboardPage from "../pages/Publisher/Dashboard/PublisherDashboardPage";
+import AllCampaignsPage from "../pages/Publisher/AdCampaigns/AllCampaignsPage";
+import DraftCampaignsPage from "../pages/Publisher/AdCampaigns/DraftCampaignsPage";
+import AddCampaignsPage from "../pages/Publisher/AdCampaigns/AddCampaignsPage";
+import CreativesLibraryPage from "../pages/Publisher/CreativesLibrary/CreativesLibraryPage";
+import { elements } from "chart.js";
+import ReportsAnalyticsPage from "../pages/Publisher/Reports/ReportsAnalyticsPage";
+import EarningsOverviewPage from "../pages/Publisher/Billing/EarningsOverviewPage";
+import TransactionHistoryPage from "../pages/Publisher/Billing/TransactionHistoryPage";
+import PaymentSettingsPage from "../pages/Publisher/Billing/PaymentSettingsPage";
+import ProfileSettingsPage from "../pages/Publisher/Account/ProfileSettingsPage";
+import HelpAndSupportPage from "../pages/Publisher/Support/HelpAndSupportPage";
+import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
+import PublisherDetailProfile from "../pages/Admin/Publisher/PublisherDetailProfile";
+import PublishersList from "../pages/Admin/Publisher/PublishersList";
+import PublisherKYCReview from "../pages/Admin/Publisher/PublisherKYCReview";
+import CampaignsList from "../pages/Admin/Campaigns/CampaignList";
+import CampaignReviewDetail from "../pages/Admin/Campaigns/CampaignReviewDetail";
+import ViewerProfile from "../pages/Admin/Viewers/ViewerProfile";
+import ViewersList from "../pages/Admin/Viewers/ViewersList";
+import PlatformVerificationDetail from "../pages/Admin/Viewers/PlatformVerificationDetail";
+import ReportsAnalytics from "../pages/Admin/Finance/ReportsAnalytics";
+import FinancialManagement from "../pages/Admin/Finance/FinancialManagement";
+import ApprovalQueueDashboard from "../pages/Admin/Approval-Queue/ApprovalQueueDashboard";
+import BlockedEntities from "../pages/Admin/Settings/BlockedPublisher";
+import CommunicationCenter from "../pages/Admin/Communication/CommunicationCenter";
+import AnnouncementsPage from "../pages/Admin/Communication/AnnouncementPage";
+import EmailCampaignsPage from "../pages/Admin/Communication/EmailCampaignsPage";
+import SupportTicketsPage from "../pages/Admin/Communication/SupportTicketsPage";
+import ChatMessagingPage from "../pages/Admin/Communication/ChatMessagingPage";
 
 export const appRoutes = [
   // ===== Dashboard =====
@@ -137,7 +166,7 @@ export const appRoutes = [
     element: <FlutterAdvanced />,
     protected: true,
   },
-   {
+  {
     path: "flutter-examples",
     element: <FlutterDartExamples />,
     protected: true,
@@ -147,7 +176,7 @@ export const appRoutes = [
     element: <IOSSetupGuide />,
     protected: true,
   },
-   {
+  {
     path: "ios-examples",
     element: <IOSImplementationExamples />,
     protected: true,
@@ -162,7 +191,7 @@ export const appRoutes = [
   },
 
 
-   {
+  {
     path: "help-center",
     element: <HelpCenter />,
     protected: true,
@@ -190,6 +219,63 @@ export const appRoutes = [
     element: <PublisherDashboardPage />,
     protected: true,
   },
+  {
+    path: "publisher-campaigns",
+    element: <AllCampaignsPage />,
+    protected: true,
+  },
+  {
+    path: "draft-campaigns",
+    element: <DraftCampaignsPage />,
+    protected: true,
+  },
+  {
+    path: "create-campaign",
+    element: <AddCampaignsPage />,
+    protected: true,
+  },
+  {
+    path: "creative-library",
+    element: <CreativesLibraryPage />,
+    protected: true,
+  },
+  {
+    path: "reports-analytics",
+    element: <ReportsAnalyticsPage />,
+    protected: true
+  },
+  {
+    path: "transaction-history",
+    element: <TransactionHistoryPage />,
+    protected: true
+  },
+  {
+    path: "earning-overview",
+    element: <EarningsOverviewPage />,
+    protected: true
+  },
+  {
+    path: "payment-settings",
+    element: <PaymentSettingsPage />,
+    protected: true
+  },
+  {
+    path: "profile-settings",
+    element: <ProfileSettingsPage />,
+    protected: true
+  },
+  {
+    path: "help-and-support",
+    element: <HelpAndSupportPage />,
+    protected: true
+  },
+
+
+
+
+
+
+
   {
     path: "create-ad",
     element: <CreateAdPage />,
@@ -239,6 +325,119 @@ export const appRoutes = [
   },
 
   // ===== Admin Routes =====
+
+  {
+    path: "admin-dashboard",
+    element: <AdminDashboard />,
+    protected: true,
+    role: "admin",
+  },
+  {
+    path: "publisher-detail",
+    element: <PublisherDetailProfile />,
+    protected: true,
+    role: "admin",
+  },
+  {
+    path: "publisher-list",
+    element: <PublishersList />,
+    protected: true,
+    role: "admin",
+  },
+  {
+    path: "publisher-kyc",
+    element: <PublisherKYCReview />,
+    protected: true,
+    role: "admin",
+  },
+  {
+    path: "campaign-review",
+    element: <CampaignReviewDetail />,
+    protected: true,
+    role: "admin",
+  },
+  {
+    path: "campaign-list",
+    element: <CampaignsList />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "viewers-profile",
+    element: <ViewerProfile />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "viewers-list",
+    element: <ViewersList />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "platform-verification",
+    element: <PlatformVerificationDetail />,
+    protected: true,
+    role: "admin"
+  },
+{
+  path: "admin-reports",
+  element: <ReportsAnalytics />,
+  protected: true,
+  role: "admin"
+},
+{
+  path: "admin-financials",
+  element: <FinancialManagement />,
+  protected: true,
+  role: "admin"
+},
+{
+  path: "admin-approval-queue",
+  element: <ApprovalQueueDashboard />,
+  protected: true,
+  role: "admin"
+},
+{
+  path: "security/blocked-publishers",
+  element: <BlockedEntities />,
+  protected: true,
+  role: "admin"
+},
+{
+  path: "admin-communication",
+  element: <CommunicationCenter />,
+  protected: true,
+  role: "admin"
+},
+{
+  path: "communications/announcements",
+  element: <AnnouncementsPage />,
+  protected: true,
+  role: "admin"
+},{
+  path: "communications/emails",
+  element: <EmailCampaignsPage />,
+  protected: true,
+  role: "admin"
+},{
+  path: "communications/support",
+  element: <SupportTicketsPage />,
+  protected: true,
+  role: "admin"
+},{
+  path: "communications/live-chat",
+  element: <ChatMessagingPage />,
+  protected: true,
+  role: "admin"
+},
+
+
+
+
+
+
+
   {
     path: "users",
     element: <UsersPage />,

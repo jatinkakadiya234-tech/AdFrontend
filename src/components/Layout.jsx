@@ -54,7 +54,29 @@ import {
   Layers,
   Layers2,
   Lock,
-  Image
+  Image,
+  LayoutDashboard,
+  LayoutDashboardIcon,
+  Users2,
+  FileCheck,
+  UserCircle,
+  Megaphone,
+  FileSearch,
+  Eye,
+  CheckSquare,
+  UserCheck,
+  ClipboardCheck,
+  DollarSign,
+  Receipt,
+  PieChart,
+  FileBarChart,
+  LineChart,
+  Bell,
+  Mail,
+  Headphones,
+  MessageSquare,
+  Shield,
+  Ban,
 } from 'lucide-react';
 import Apihelper from '../service/Apihelper';
 
@@ -281,96 +303,115 @@ const Layout = () => {
         },
         {
           name: 'Creatives Library',
-          path: '/app/creatives',
+          path: '/app/creative-library',
           icon: Image,
         },
         {
           name: 'Reports & Analytics',
-          path: '/app/reports',
+          path: '/app/reports-analytics',
           icon: BarChart3,
         },
         {
           name: 'Payments',
           icon: Wallet,
           subOptions: [
-            { name: 'Earnings Overview', path: '/app/earnings-overview', icon: TrendingUp },
-            { name: 'Transaction History', path: '/app/transactions', icon: CreditCard },
+            { name: 'Earnings Overview', path: '/app/earning-overview', icon: TrendingUp },
+            { name: 'Transaction History', path: '/app/transaction-history', icon: CreditCard },
             { name: 'Payment Settings', path: '/app/payment-settings', icon: Settings2 },
           ],
         },
         {
           name: 'Account Settings',
           icon: Settings,
-          subOptions: [
-            { name: 'Profile', path: '/app/profile', icon: User2 },
-            { name: 'Platforms', path: '/app/platforms', icon: Layers2 },
-            { name: 'Security', path: '/app/security', icon: Lock },
-          ],
+          path: '/app/profile-settings',
         },
         {
           name: 'Help & Support',
           icon: HelpCircle,
-          subOptions: [
-            { name: 'Help Center', path: '/app/help-center', icon: BookOpen },
-            { name: 'Contact Support', path: '/app/contact', icon: Users },
-          ],
+          path: '/app/help-and-support'
         },
       ],
       admin: [
         {
-          name: 'Admin Dashboard',
-          path: '/app/dashboard',
-          icon: MdDashboard,
+          name: 'Dashboard',
+          path: '/app/admin-dashboard',
+          icon: LayoutDashboardIcon,
         },
+
+        {
+          name: 'Publisher Management',
+          icon: Users,
+          subOptions: [
+            { name: 'All Publishers', path: '/app/publisher-list', icon: Users2 },
+            { name: 'KYC Review', path: '/app/publisher-kyc', icon: FileCheck },
+            { name: 'Publisher Profiles', path: '/app/publisher-detail', icon: UserCircle },
+          ],
+        },
+
         {
           name: 'Campaign Management',
-          icon: MdDescription,
+          icon: Megaphone,
           subOptions: [
-            { name: 'All Campaigns', path: '/app/admin-campaigns', icon: MdList },
-            { name: 'Campaign Analytics', path: '/app/campaign-analytics', icon: MdAnalytics },
-            { name: 'Approval Queue', path: '/app/approval-queue', icon: MdCheckCircle },
+            { name: 'All Campaigns', path: '/app/campaign-list', icon: Megaphone },
+            { name: 'Campaign Review', path: '/app/campaign-review', icon: FileSearch },
           ],
         },
+
         {
-          name: 'User Management',
-          icon: MdGroup,
+          name: 'Viewer Management',
+          icon: Eye,
           subOptions: [
-            { name: 'Advertisers', path: '/app/advertisers', icon: MdPerson },
-            { name: 'Publishers', path: '/app/publishers', icon: MdGroup },
-            { name: 'All Users', path: '/app/users', icon: MdManageAccounts },
+            { name: 'All Viewers', path: '/app/viewers-list', icon: Eye },
+            { name: 'Platform Verification', path: '/app/platform-verification', icon: CheckSquare },
+            { name: 'Viewer Profiles', path: '/app/viewers-profile', icon: UserCheck },
           ],
         },
+
         {
-          name: 'Content & Categories',
-          icon: MdApps,
-          subOptions: [
-            { name: 'Category Management', path: '/app/categories', icon: MdList },
-            { name: 'Content Moderation', path: '/app/content-moderation', icon: MdCheckCircle },
-          ],
+          name: 'Approval Queue',
+          path: '/app/admin-approval-queue',
+          icon: ClipboardCheck,
         },
-        {
-          name: 'Analytics & Reporting',
-          icon: BarChart3,
-          subOptions: [
-            { name: 'Platform Analytics', path: '/app/analytics', icon: MdDashboard },
-            { name: 'Impressions', path: '/app/impressions', icon: MdVisibility },
-            { name: 'Financial Reports', path: '/app/financial-reports', icon: MdReport },
-          ],
-        },
+
         {
           name: 'Financial Management',
-          icon: MdAccountBalanceWallet,
+          icon: DollarSign,
+          path: "/app/admin-financials"
+        },
+
+        {
+          name: 'Reports & Analytics',
+          icon: BarChart3,
+         path: "/app/admin-reports"
+        },
+
+        {
+          name: 'Communications',
+          icon: Bell,
           subOptions: [
-            { name: 'Revenue Overview', path: '/app/wallet', icon: MdAccountBalanceWallet },
-            { name: 'Transaction History', path: '/app/transactions', icon: MdPayments },
+            { name: 'Announcements', path: '/app/communications/announcements', icon: Bell },
+            { name: 'Email Campaigns', path: '/app/communications/emails', icon: Mail },
+            { name: 'Support Tickets', path: '/app/communications/support', icon: Headphones },
+            { name: 'Live Chat', path: '/app/communications/live-chat', icon: MessageSquare },
           ],
         },
+
         {
-          name: 'System Settings',
-          path: '/app/settings',
-          icon: MdSettings,
+          name: 'Security',
+          icon: Shield,
+          subOptions: [
+            // { name: 'Fraud Detection', path: '/app/security/fraud', icon: Shield },
+            { name: 'Blocked Entities', path: '/app/security/blocked-publishers', icon: Ban },
+            // { name: 'Audit Logs', path: '/app/security/audit', icon: FileText },
+          ],
         },
-      ],
+
+        {
+          name: 'Settings',
+          path: '/app/settings',
+          icon: Settings,
+        },
+      ]
     };
 
     return baseItems[role] || baseItems.viewer;
