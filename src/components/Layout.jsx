@@ -136,7 +136,7 @@ const Layout = () => {
       setUser(null);
       setProfileOpen(false);
       setSidebarOpen(false);
-      window.location.href = '/login';
+      window.location.href = '/';
     }
   };
 
@@ -376,13 +376,22 @@ const Layout = () => {
         {
           name: 'Financial Management',
           icon: DollarSign,
-          path: "/app/admin-financials"
+          subOptions: [
+            { name: 'Revenue Overview', path: '/app/finance/revenue-overview', icon: BarChart3 },
+            { name: 'Publisher Payments', path: '/app/finance/publisher-payment', icon: Wallet },
+            { name: 'Viewer Payouts', path: '/app/finance/viewer-payout', icon: Users },
+            { name: 'Transaction Logs', path: '/app/finance/transaction-logs', icon: FileText },
+          ],
         },
 
         {
           name: 'Reports & Analytics',
           icon: BarChart3,
-         path: "/app/admin-reports"
+        subOptions: [
+            { name: 'User Reports', path: '/app/reports/user-reports', icon: BarChart3 },
+            { name: 'Campaign Reports', path: '/app/reports/campaign-reports', icon: Wallet },
+            { name: 'Financial Reports ', path: '/app/reports/financial-reports', icon: Users },
+          ],
         },
 
         {

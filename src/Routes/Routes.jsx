@@ -64,7 +64,6 @@ import ViewerProfile from "../pages/Admin/Viewers/ViewerProfile";
 import ViewersList from "../pages/Admin/Viewers/ViewersList";
 import PlatformVerificationDetail from "../pages/Admin/Viewers/PlatformVerificationDetail";
 import ReportsAnalytics from "../pages/Admin/Finance/ReportsAnalytics";
-import FinancialManagement from "../pages/Admin/Finance/FinancialManagement";
 import ApprovalQueueDashboard from "../pages/Admin/Approval-Queue/ApprovalQueueDashboard";
 import BlockedEntities from "../pages/Admin/Settings/BlockedPublisher";
 import CommunicationCenter from "../pages/Admin/Communication/CommunicationCenter";
@@ -72,6 +71,15 @@ import AnnouncementsPage from "../pages/Admin/Communication/AnnouncementPage";
 import EmailCampaignsPage from "../pages/Admin/Communication/EmailCampaignsPage";
 import SupportTicketsPage from "../pages/Admin/Communication/SupportTicketsPage";
 import ChatMessagingPage from "../pages/Admin/Communication/ChatMessagingPage";
+import PublisherPaymentsPage from "../pages/Admin/Finance/PublisherPaymentsPage";
+import ViewerPayoutsPage from "../pages/Admin/Finance/ViewerPayoutPage";
+import TransactionLogsPage from "../pages/Admin/Finance/TransactionLogsPage";
+import RevenueOverviewPage from "../pages/Admin/Finance/RevenewOverviewPage";
+import UserReportsPage from "../pages/Admin/Reports/UserReportsPage";
+import CampaignReportsPage from "../pages/Admin/Reports/CampaignReports";
+import FinancialReportsPage from "../pages/Admin/Reports/FinancialReports";
+import LandingPage from "../pages/Common/LandingPage";
+
 
 export const appRoutes = [
   // ===== Dashboard =====
@@ -314,6 +322,10 @@ export const appRoutes = [
 
   // ===== Common Routes =====
   {
+    path: "",
+    element: <LandingPage />
+  },
+  {
     path: "settings",
     element: <SettingsPage />,
     protected: true,
@@ -380,57 +392,91 @@ export const appRoutes = [
     protected: true,
     role: "admin"
   },
-{
-  path: "admin-reports",
-  element: <ReportsAnalytics />,
-  protected: true,
-  role: "admin"
-},
-{
-  path: "admin-financials",
-  element: <FinancialManagement />,
-  protected: true,
-  role: "admin"
-},
-{
-  path: "admin-approval-queue",
-  element: <ApprovalQueueDashboard />,
-  protected: true,
-  role: "admin"
-},
-{
-  path: "security/blocked-publishers",
-  element: <BlockedEntities />,
-  protected: true,
-  role: "admin"
-},
-{
-  path: "admin-communication",
-  element: <CommunicationCenter />,
-  protected: true,
-  role: "admin"
-},
-{
-  path: "communications/announcements",
-  element: <AnnouncementsPage />,
-  protected: true,
-  role: "admin"
-},{
-  path: "communications/emails",
-  element: <EmailCampaignsPage />,
-  protected: true,
-  role: "admin"
-},{
-  path: "communications/support",
-  element: <SupportTicketsPage />,
-  protected: true,
-  role: "admin"
-},{
-  path: "communications/live-chat",
-  element: <ChatMessagingPage />,
-  protected: true,
-  role: "admin"
-},
+  {
+    path: "admin-reports",
+    element: <ReportsAnalytics />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "admin-approval-queue",
+    element: <ApprovalQueueDashboard />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "security/blocked-publishers",
+    element: <BlockedEntities />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "admin-communication",
+    element: <CommunicationCenter />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "communications/announcements",
+    element: <AnnouncementsPage />,
+    protected: true,
+    role: "admin"
+  }, {
+    path: "communications/emails",
+    element: <EmailCampaignsPage />,
+    protected: true,
+    role: "admin"
+  }, {
+    path: "communications/support",
+    element: <SupportTicketsPage />,
+    protected: true,
+    role: "admin"
+  }, {
+    path: "communications/live-chat",
+    element: <ChatMessagingPage />,
+    protected: true,
+    role: "admin"
+  }, {
+    path: "finance/revenue-overview",
+    element: <RevenueOverviewPage />,
+    protected: true,
+    role: "admin"
+  }, {
+    path: "finance/publisher-payment",
+    element: <PublisherPaymentsPage />,
+    protected: true,
+    role: "admin"
+  }, {
+    path: "finance/transaction-logs",
+    element: <TransactionLogsPage />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "finance/viewer-payout",
+    element: <ViewerPayoutsPage />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "reports/financial-reports",
+    element: <FinancialReportsPage />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "reports/campaign-reports",
+    element: <CampaignReportsPage />,
+    protected: true,
+    role: "admin"
+  },
+  {
+    path: "reports/user-reports",
+    element: <UserReportsPage />,
+    protected: true,
+    role: "admin"
+  },
+
 
 
 

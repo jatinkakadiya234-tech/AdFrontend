@@ -1,6 +1,8 @@
-import axios from "axios"
+// src/service/Apihelper.js
 
-const url = "http://localhost:5500/api"
+import axios from "axios";
+
+const url = "http://localhost:5500/api";
 
 // Configure axios to include credentials (cookies)
 axios.defaults.withCredentials = true;
@@ -14,22 +16,111 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
+// Response interceptor for error handling
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/';
+    }
+    return Promise.reject(error);
+  }
+);
+
 const Apihelper = {
-  // Legacy User APIs
-  Ragister: (data) => {
-    return axios.post(url + "/user/register", data)
-  },
-  Login: (data) => {
-    return axios.post(url + "/user/login", data)
-  },
-  Logout: () => {
-    return axios.post(url + "/user/logout")
-  },
+  // ===== Authentication APIs =====
   
+  /**
+   * Register new user (Publisher or Viewer)
+   */
+  Register: async (data) => {
+    try {
+      const response = await axios.post(`${url}/user/register`, data);
+      return {
+        success: true,
+        token: response.data.token,
+        user: response.data.user,
+        message: response.data.message
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Registration failed'
+      };
+    }
+  },
 
-  
+  /**
+   * Login user (Admin, Publisher, or Viewer)
+   */
+  Login: async (data) => {
+    try {
+      const response = await axios.post(`${url}/user/login`, {
+        usernameOrEmail: data.email || data.usernameOrEmail,
+        password: data.password
+      });
+      return {
+        success: true,
+        token: response.data.token,
+        user: response.data.user,
+        message: response.data.message
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Login failed'
+      };
+    }
+  },
 
+  /**
+   * Logout user
+   */
+  Logout: async () => {
+    try {
+      await axios.post(`${url}/user/logout`);
+      return { success: true };
+    } catch (error) {
+      console.error('Logout error:', error);
+      return { success: false };
+    }
+  },
+
+  /**
+   * Validate token
+   */
+  ValidateToken: async (token) => {
+    try {
+      const response = await axios.get(`${url}/user/validate`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return {
+        valid: true,
+        user: response.data.user
+      };
+    } catch (error) {
+      return { valid: false };
+    }
+  },
+
+  // Legacy aliases (for backward compatibility)
+  Ragister: function(data) {
+    return this.Register(data);
+  },
   
+  login: function(data) {
+    return this.Login(data);
+  },
+
+  logout: function() {
+    return this.Logout();
+  },
+
+
+
   // Join Request APIs
   SubmitJoinRequest: (data) => {
     return axios.post(url + "/join-request/submit", data)

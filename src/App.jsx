@@ -2,52 +2,44 @@ import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/Layout";
-import LandingPage from "./components/LandingPage";
-import AuthContainer from "./auth/AuthContainer";
+import LandingPage from "./pages/Common/LandingPage";
+import AdminLogin from "./pages/auth/AdminLogin";
+import PublisherAuth from "./pages/auth/PublisherAuth";
+import ViewerAuth from "./pages/auth/ViewerAuth";
 import ProtectedRoute from "./Routes/ProtectedRoute";
-import AuthTest from "./components/AuthTest";
 import { appRoutes } from "./Routes/Routes";
+import { isAuthenticated, getCurrentUser, getUserRole } from "./utils/authUtils";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    checkAuthStatus();
+    // Small delay to check authentication status
+    setTimeout(() => setLoading(false), 300);
   }, []);
 
-  const checkAuthStatus = () => {
-    try {
-      const token = localStorage.getItem("token");
-      const userData = localStorage.getItem("user");
-
-      if (token && userData) {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-        setUser(null);
-      }
-    } catch (error) {
-      console.error("Auth check error:", error);
-      localStorage.clear();
-      setIsAuthenticated(false);
-      setUser(null);
-    } finally {
-      setLoading(false);
+  // Component to redirect authenticated users from auth pages
+  const RedirectIfAuthenticated = ({ children }) => {
+    if (isAuthenticated()) {
+      const role = getUserRole();
+      const redirectMap = {
+        admin: '/app/admin-dashboard',
+        publisher: '/app/publisher-dashboard',
+        viewer: '/app/dashboard'
+      };
+      return <Navigate to={redirectMap[role] || '/app/dashboard'} replace />;
     }
+    return children;
   };
-
-  const handleAuthSuccess = () => checkAuthStatus();
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mb-4 mx-auto animate-pulse">
+            <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <p className="text-xl font-semibold text-gray-700">Loading...</p>
         </div>
       </div>
     );
@@ -56,40 +48,61 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public routes */}
+        {/* ===== Public Landing Page ===== */}
         <Route
           path="/"
           element={
-            !isAuthenticated ? <LandingPage /> : <Navigate to="/app/dashboard" replace />
+            <RedirectIfAuthenticated>
+              <LandingPage />
+            </RedirectIfAuthenticated>
           }
         />
-        <Route
-          path="/login"
-          element={
-            !isAuthenticated ? (
-              <AuthContainer onAuthSuccess={handleAuthSuccess} />
-            ) : (
-              <Navigate to="/app/dashboard" replace />
-            )
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            !isAuthenticated ? (
-              <AuthContainer onAuthSuccess={handleAuthSuccess} />
-            ) : (
-              <Navigate to="/app/dashboard" replace />
-            )
-          }
-        />
-        <Route path="/auth-test" element={<AuthTest />} />
 
-        {/* App Layout Routes */}
-        <Route path="/app" element={<Layout />}>
+        {/* ===== Authentication Routes ===== */}
+        <Route
+          path="/auth/admin"
+          element={
+            <RedirectIfAuthenticated>
+              <AdminLogin />
+            </RedirectIfAuthenticated>
+          }
+        />
+        <Route
+          path="/auth/publisher"
+          element={
+            <RedirectIfAuthenticated>
+              <PublisherAuth />
+            </RedirectIfAuthenticated>
+          }
+        />
+        <Route
+          path="/auth/viewer"
+          element={
+            <RedirectIfAuthenticated>
+              <ViewerAuth />
+            </RedirectIfAuthenticated>
+          }
+        />
+
+        {/* ===== Legacy Auth Routes (Redirect to Landing) ===== */}
+        <Route path="/login" element={<Navigate to="/" replace />} />
+        <Route path="/register" element={<Navigate to="/" replace />} />
+
+        {/* ===== Protected App Routes ===== */}
+        <Route
+          path="/app"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<Navigate to="dashboard" replace />} />
+          
           {appRoutes.map(({ path, element, protected: isProtected, role }) => {
-            const routeElement = isProtected ? (
+            // All routes inside /app are protected by Layout's ProtectedRoute
+            // Only add role-specific protection if specified
+            const routeElement = role ? (
               <ProtectedRoute requiredRole={role}>{element}</ProtectedRoute>
             ) : (
               element
@@ -99,7 +112,7 @@ function App() {
           })}
         </Route>
 
-        {/* Fallback */}
+        {/* ===== Fallback Route ===== */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
